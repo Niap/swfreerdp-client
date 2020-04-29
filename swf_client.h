@@ -47,6 +47,9 @@ typedef struct swf_context
 
 
 	POINT diff;
+
+
+	RailClientContext* rail;
 } swfContext;
 
 

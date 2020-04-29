@@ -2,8 +2,10 @@
 #include <freerdp/freerdp.h>
 #include <freerdp/log.h>
 #include <freerdp/gdi/gdi.h>
+#include <freerdp/client/channels.h>
 
 #include "swf_event.h"
+#include "swf_channels.h"
 
 #define TAG CLIENT_TAG("swindows")
 
@@ -11,6 +13,8 @@ static BOOL swfreerdp_client_global_init(void)
 {
 	WSADATA wsaData;
 	WSAStartup(0x101, &wsaData);
+
+	freerdp_register_addin_provider(freerdp_channels_load_static_addin_entry, 0);
 	return TRUE;
 }
 
@@ -59,6 +63,12 @@ static BOOL swf_pre_connect(freerdp* instance)
 	settings->OrderSupport[NEG_ELLIPSE_SC_INDEX] = FALSE;
 	settings->OrderSupport[NEG_ELLIPSE_CB_INDEX] = FALSE;
 
+	if (!freerdp_client_load_addins(context->channels, instance->settings))
+		return -1;
+
+
+	PubSub_SubscribeChannelConnected(instance->context->pubSub,swf_OnChannelConnectedEventHandler);
+	PubSub_SubscribeChannelDisconnected(instance->context->pubSub,swf_OnChannelDisconnectedEventHandler);
 
 	return TRUE;
 }

@@ -149,16 +149,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="swfreerdp.c" />
+    <ClCompile Include="swf_channels.c" />
     <ClCompile Include="swf_client.c" />
     <ClCompile Include="swf_event.c" />
     <ClCompile Include="swf_gdi.c" />
     <ClCompile Include="swf_graphics.c" />
+    <ClCompile Include="swf_rail.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="swf_channels.h" />
     <ClInclude Include="swf_client.h" />
     <ClInclude Include="swf_event.h" />
     <ClInclude Include="swf_gdi.h" />
     <ClInclude Include="swf_graphics.h" />
+    <ClInclude Include="swf_rail.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
