@@ -2,25 +2,6 @@
 
 #define TAG CLIENT_TAG("windows")
 
-static UINT wf_rail_server_execute_result(RailClientContext* context,
-	RAIL_EXEC_RESULT_ORDER* execResult)
-{
-	WLog_DBG(TAG, "RailServerExecuteResult: 0x%08X", execResult->rawResult);
-	return CHANNEL_RC_OK;
-}
-
-static UINT wf_rail_server_system_param(RailClientContext* context,
-	RAIL_SYSPARAM_ORDER* sysparam)
-{
-	return CHANNEL_RC_OK;
-}
-
-
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
 static UINT wf_rail_server_handshake(RailClientContext* context,
 	RAIL_HANDSHAKE_ORDER* handshake)
 {
@@ -72,149 +53,6 @@ static UINT wf_rail_server_handshake(RailClientContext* context,
 	return CHANNEL_RC_OK;
 }
 
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
-static UINT wf_rail_server_handshake_ex(RailClientContext* context,
-	RAIL_HANDSHAKE_EX_ORDER* handshakeEx)
-{
-	return CHANNEL_RC_OK;
-}
-
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
-static UINT wf_rail_server_local_move_size(RailClientContext* context,
-	RAIL_LOCALMOVESIZE_ORDER* localMoveSize)
-{
-	return CHANNEL_RC_OK;
-}
-
-
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
-static UINT wf_rail_server_min_max_info(RailClientContext* context,
-	RAIL_MINMAXINFO_ORDER* minMaxInfo)
-{
-	return CHANNEL_RC_OK;
-}
-
-
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
-static UINT wf_rail_server_language_bar_info(RailClientContext* context,
-	RAIL_LANGBAR_INFO_ORDER* langBarInfo)
-{
-	return CHANNEL_RC_OK;
-}
-
-/**
-* Function description
-*
-* @return 0 on success, otherwise a Win32 error code
-*/
-static UINT wf_rail_server_get_appid_response(RailClientContext* context,
-	RAIL_GET_APPID_RESP_ORDER* getAppIdResp)
-{
-	return CHANNEL_RC_OK;
-}
-
-
-static BOOL wf_rail_window_common(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, WINDOW_STATE_ORDER* windowState)
-{
-	
-	return TRUE;
-}
-
-static BOOL wf_rail_window_delete(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo)
-{
-
-	return TRUE;
-}
-
-static BOOL wf_rail_window_icon(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, WINDOW_ICON_ORDER* windowIcon) {
-
-	return TRUE;
-}
-
-static BOOL wf_rail_window_cached_icon(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, WINDOW_CACHED_ICON_ORDER* windowCachedIcon)
-{
-	WLog_DBG(TAG, "RailWindowCachedIcon");
-	return TRUE;
-}
-
-static BOOL wf_rail_notify_icon_create(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, NOTIFY_ICON_STATE_ORDER* notifyIconState)
-{
-	return TRUE;
-}
-
-static BOOL wf_rail_notify_icon_update(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, NOTIFY_ICON_STATE_ORDER* notifyIconState)
-{
-	return TRUE;
-}
-
-static BOOL wf_rail_notify_icon_delete(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo)
-{
-	swfContext* wfc = (swfContext*)context;
-	RailClientContext* rail = wfc->rail;
-	WLog_DBG(TAG, "RailNotifyIconDelete");
-	return TRUE;
-}
-
-static BOOL wf_rail_monitored_desktop(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo, MONITORED_DESKTOP_ORDER* monitoredDesktop)
-{
-	swfContext* wfc = (swfContext*)context;
-	RailClientContext* rail = wfc->rail;
-	WLog_DBG(TAG, "RailMonitorDesktop");
-	return TRUE;
-}
-
-static BOOL wf_rail_non_monitored_desktop(rdpContext* context,
-	WINDOW_ORDER_INFO* orderInfo)
-{
-	swfContext* wfc = (swfContext*)context;
-	RailClientContext* rail = wfc->rail;
-	WLog_DBG(TAG, "RailNonMonitorDesktop");
-	return TRUE;
-}
-
-
-
-void wf_rail_register_update_callbacks(rdpUpdate* update)
-{
-	rdpWindowUpdate* window = update->window;
-	window->WindowCreate = wf_rail_window_common;
-	window->WindowUpdate = wf_rail_window_common;
-	window->WindowDelete = wf_rail_window_delete;
-	window->WindowIcon = wf_rail_window_icon;
-	window->WindowCachedIcon = wf_rail_window_cached_icon;
-	window->NotifyIconCreate = wf_rail_notify_icon_create;
-	window->NotifyIconUpdate = wf_rail_notify_icon_update;
-	window->NotifyIconDelete = wf_rail_notify_icon_delete;
-	window->MonitoredDesktop = wf_rail_monitored_desktop;
-	window->NonMonitoredDesktop = wf_rail_non_monitored_desktop;
-}
-
-
-
 
 
 BOOL swf_rail_init(swfContext* swfc, RailClientContext* rail)
@@ -222,15 +60,7 @@ BOOL swf_rail_init(swfContext* swfc, RailClientContext* rail)
 	rdpContext* context = (rdpContext*)swfc;
 	swfc->rail = rail;
 	rail->custom = (void*)swfc;
-	rail->ServerExecuteResult = wf_rail_server_execute_result;
-	rail->ServerSystemParam = wf_rail_server_system_param;
 	rail->ServerHandshake = wf_rail_server_handshake;
-	rail->ServerHandshakeEx = wf_rail_server_handshake_ex;
-	rail->ServerLocalMoveSize = wf_rail_server_local_move_size;
-	rail->ServerMinMaxInfo = wf_rail_server_min_max_info;
-	rail->ServerLanguageBarInfo = wf_rail_server_language_bar_info;
-	rail->ServerGetAppIdResponse = wf_rail_server_get_appid_response;
-	//wf_rail_register_update_callbacks(context->update);
 	return TRUE;
 }
 

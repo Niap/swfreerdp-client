@@ -14,7 +14,6 @@ static BOOL swfreerdp_client_global_init(void)
 	WSADATA wsaData;
 	WSAStartup(0x101, &wsaData);
 
-	freerdp_register_addin_provider(freerdp_channels_load_static_addin_entry, 0);
 	return TRUE;
 }
 
