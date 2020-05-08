@@ -6,6 +6,7 @@
 
 #include "swf_event.h"
 #include "swf_channels.h"
+#include "swf_gdi.h"
 
 #define TAG CLIENT_TAG("swindows")
 
@@ -172,6 +173,23 @@ static BOOL wf_post_connect(freerdp* instance)
 	UpdateWindow(wfc->hwnd);
 	instance->update->BeginPaint = swf_begin_paint;
 	instance->update->EndPaint = swf_end_paint;
+	rdpUpdate* update = instance->update;
+	rdpPrimaryUpdate* primary = instance->update->primary;
+
+	
+	/*primary->DstBlt = swf_rdp_gdi_dstblt;
+	primary->ScrBlt = swf_rdp_gdi_scrblt;
+	primary->MemBlt = swf_rdp_gdi_memblt;
+	
+	update->Palette = swf_rdp_gdi_palette_update;
+	update->SetBounds = swf_rdp_gdi_set_bounds;
+	primary->PatBlt = swf_rdp_gdi_patblt;
+	primary->OpaqueRect = swf_rdp_gdi_opaque_rect;
+	primary->MultiOpaqueRect = swf_rdp_gdi_multi_opaque_rect;
+	primary->LineTo = swf_rdp_gdi_line_to;
+	primary->Polyline = swf_rdp_gdi_polyline;
+	primary->Mem3Blt = swf_rdp_gdi_mem3blt;
+	update->SurfaceFrameMarker = swf_rdp_gdi_surface_frame_marker;*/
 
 	return TRUE;
 }
