@@ -10,6 +10,9 @@ LRESULT CALLBACK swf_event_proc(HWND hWnd, UINT Msg, WPARAM wParam,
 	UINT32 ww, wh, dw, dh;
 	rdpSettings* settings = NULL;
 
+	DWORD rdp_scancode;
+	rdpInput* input;
+
 	switch (Msg)
 	{
 		case WM_DESTROY:
@@ -27,6 +30,19 @@ LRESULT CALLBACK swf_event_proc(HWND hWnd, UINT Msg, WPARAM wParam,
 
 			EndPaint(hWnd, &ps);
 		break;
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+			rdp_scancode = (lParam >> 16) & 0xff;
+
+			input = swfc->context.input;
+			freerdp_input_send_keyboard_event_ex(input, TRUE,rdp_scancode);
+			break;
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			rdp_scancode = lParam >> 16 & 0xff;
+			input = swfc->context.input;
+			freerdp_input_send_keyboard_event_ex(input, FALSE, rdp_scancode);
+			break;
 		default:
 			return DefWindowProc(hWnd, Msg, wParam, lParam);
 			break;
