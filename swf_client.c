@@ -336,9 +336,9 @@ static int swfreerdp_client_start(rdpContext* context)
 	swfc->wndClass.lpszMenuName = NULL;
 	swfc->wndClass.lpszClassName = swfc->wndClassName;
 	swfc->wndClass.hInstance = hInstance;
+	swfc->wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	RegisterClassEx(&(swfc->wndClass));
 	
-
 	swfc->thread = CreateThread(NULL, 0, swf_client_thread, (void*)instance, 0,
 		&swfc->mainThreadId);
 
