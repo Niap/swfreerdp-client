@@ -36,6 +36,9 @@
     <ClCompile Include="swf_channels.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="swf_clipboard.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="swf_client.h">
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="swf_rail.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="swf_clipboard.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

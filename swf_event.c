@@ -1,4 +1,9 @@
 #include "swf_event.h"
+#include "swf_clipboard.h"
+
+typedef BOOL(WINAPI* fnAddClipboardFormatListener)(HWND hwnd);
+
+
 
 #define X_POS(lParam) ((UINT16) (lParam & 0xFFFF))
 #define Y_POS(lParam) ((UINT16) ((lParam >> 16) & 0xFFFF))
@@ -12,12 +17,28 @@ LRESULT CALLBACK swf_event_proc(HWND hWnd, UINT Msg, WPARAM wParam,
 	swfContext* swfc = (swfContext*)ptr;
 	UINT32 ww, wh, dw, dh;
 	rdpSettings* settings = NULL;
+	HMODULE hUser32;
+	fnAddClipboardFormatListener AddClipboardFormatListener;
+
+
+	int count;
+	CLIPRDR_FORMAT* formats;
+	CLIPRDR_FORMAT_LIST formatList;
+	UINT32 numFormats;
+	UINT32 formatId = 0;
+	UINT32 index=0;
+	char formatName[1024];
 
 	DWORD rdp_scancode;
 	rdpInput* input;
 
 	switch (Msg)
 	{
+		case WM_CREATE:
+			hUser32 = LoadLibraryA("user32.dll");
+			AddClipboardFormatListener = (fnAddClipboardFormatListener)GetProcAddress(hUser32, "AddClipboardFormatListener");
+			AddClipboardFormatListener(hWnd);
+		break;
 		case WM_DESTROY:
 			PostQuitMessage(WM_QUIT);
 		break;
@@ -68,6 +89,11 @@ LRESULT CALLBACK swf_event_proc(HWND hWnd, UINT Msg, WPARAM wParam,
 			freerdp_input_send_mouse_event(input, PTR_FLAGS_BUTTON2, X_POS(lParam), Y_POS(lParam));
 			break;
 
+
+		case WM_CLIPBOARDUPDATE:
+			cliprdr_send_format_list(swfc->clipboard->context);
+			break;
+		
 		default:
 			return DefWindowProc(hWnd, Msg, wParam, lParam);
 			break;

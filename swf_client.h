@@ -14,6 +14,14 @@
 #include <freerdp/codec/rfx.h>
 #include <freerdp/codec/nsc.h>
 #include <freerdp/client/file.h>
+#include <freerdp/client/cliprdr.h>
+
+typedef struct _swfClipboard {
+	char mimetype[256];
+	char* buffer;
+	int length;
+	CliprdrClientContext* context;
+} swfClipboard;
 
 typedef struct swf_bitmap
 {
@@ -50,6 +58,7 @@ typedef struct swf_context
 
 
 	RailClientContext* rail;
+	swfClipboard * clipboard;
 } swfContext;
 
 
